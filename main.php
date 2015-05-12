@@ -1,23 +1,28 @@
 <?php
 
+include('./simple_html_dom.php');
+
 print_r(write_log());
 
-$my_img = imagecreate( 2000, 200 );
-$background = imagecolorallocate( $my_img, 0, 0, 255 );
-$text_colour = imagecolorallocate( $my_img, 255, 255, 0 );
-$line_colour = imagecolorallocate( $my_img, 128, 255, 0 );
-imagestring( $my_img, 4, 30, 25, time(), $text_colour );
-imagesetthickness ( $my_img, 5 );
-//imageline( $my_img, 30, 45, 165, 45, $line_colour );
-//imagestring( $my_img, 4, 30, 165, print_r(getallheaders(), true), $text_colour );
-//header( "Content-type: image/png" );
-//imagepng( $my_img );
 
-//print($my_img);
-
-$user_id = 'f';
-
-fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
+print("This is a debug");
+//$my_img = imagecreate( 2000, 200 );
+//$background = imagecolorallocate( $my_img, 0, 0, 255 );
+//$text_colour = imagecolorallocate( $my_img, 255, 255, 0 );
+//$line_colour = imagecolorallocate( $my_img, 128, 255, 0 );
+//imagestring( $my_img, 4, 30, 25, time(), $text_colour );
+//imagesetthickness ( $my_img, 5 );
+////imageline( $my_img, 30, 45, 165, 45, $line_colour );
+////imagestring( $my_img, 4, 30, 165, print_r(getallheaders(), true), $text_colour );
+////header( "Content-type: image/png" );
+////imagepng( $my_img );
+//
+////print($my_img);
+//
+//$user_id = 'f';
+//
+//fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
+fetch_with_url("http://127.0.0.1:1289/account.html");
 
 //print_r(fetch('2843751'));
 
@@ -55,8 +60,39 @@ function fetch_with_api($uid) {
 }
 
 function fetch_with_url($url) {
-    $stackexchange_page = file_get_contents($url);
-    print_r($stackexchange_page);
+//    $stackexchange_page = file_get_html($url);
+//    print_r($stackexchange_page);
+    $html = file_get_html($url);
+
+    // Get user name and avatar
+    // Get user ID from the panel
+    // Get reputation
+    // Get newest questions and answers
+
+    $accounts = $html->find('div[class="account-container"]');
+
+    for($i = 0; $i < 3; $i++) {
+
+//        print_r($accounts[$i]);
+//        var_dump($accounts[$i]);
+
+//        var_dump( is_object($accounts[$i]));
+//        $current = str_get_html($accounts[$i]);
+        $link = $accounts[$i]->find('div');
+        foreach($link as $lk) {
+//            var_dump($lk->innertext);
+            echo $lk->innertext;
+        }
+
+
+//        echo $accounts[$i] .'<br>';
+    }
+
+
+    // Fetch the top 3 sites
+
+
+
 }
 
 function forceUpdate() {
