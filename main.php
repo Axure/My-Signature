@@ -2,7 +2,7 @@
 
 include('./simple_html_dom.php');
 
-print_r(write_log());
+//print_r(write_log());
 
 
 print("This is a debug");
@@ -23,7 +23,7 @@ print("This is a debug");
 //
 //fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
 fetch_with_url("http://127.0.0.1:1289/account.html");
-fetch_with_url("http://stackexchange.com/users/373922/loom?tab=accounts");
+//fetch_with_url("http://stackexchange.com/users/373922/loom?tab=accounts");
 
 //print_r(fetch('2843751'));
 
@@ -94,12 +94,30 @@ function fetch_with_url($url) {
         echo "User id is: " . $ids ."\n";
 
 
+        $domain_pattern = "/http:\/\/(.*?)\/.*\//";
+        preg_match_all($domain_pattern, $link, $domain);
+        $domain = $domain[1][0];
+        var_dump($domain);
 
+//        $detail_account = file_get_html($link);
 
+        // get question number and answer number
+        $answer_number = $accounts[$i]->find('div[class="account-stat"]', 2)->children[0]->innertext;
+        $question_number = $accounts[$i]->find('div[class="account-stat"]', 3)->children[0]->innertext;
 
+//        var_dump($answer_number, $question_number);
+        echo "answer number is: " . $answer_number ."\n";
+        echo "question number is: " . $question_number ."\n";
 
+        $answer_ajax = "http://" . $domain . "/ajax/users/panel/answers/" . $ids . "?sort=newest";
+        $question_ajax = "http://" . $domain . "/ajax/users/panel/questions/" . $ids . "?sort=newest";
 
-        
+        var_dump($answer_ajax, $question_ajax);
+//
+//        $answers = file_get_html($answer_ajax);
+//
+//
+//        $questions = file_get_html($question_ajax)
 
 
 
