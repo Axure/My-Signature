@@ -21,8 +21,8 @@ print("This is a debug");
 //
 //$user_id = 'f';
 //
-//fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
-fetch_with_url("http://127.0.0.1:1289/account.html");
+fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
+//fetch_with_url("http://127.0.0.1:1289/account.html");
 //fetch_with_url("http://stackexchange.com/users/373922/loom?tab=accounts");
 
 //print_r(fetch('2843751'));
@@ -72,6 +72,14 @@ function fetch_with_url($url) {
 
     $accounts = $html->find('div[class="account-container"]');
 
+    $title = $html->find("title", 0)->innertext;
+    $username_pattern = "/User (.*?) - Stack Exchange/";
+    preg_match_all($username_pattern, $title, $username);
+    $username = $username[1][0];
+
+    var_dump($username);
+    $data["username"] = $username;
+
     for($i = 0; $i < 3; $i++) {
 
 //        print_r($accounts[$i]);
@@ -80,6 +88,14 @@ function fetch_with_url($url) {
 //        var_dump( is_object($accounts[$i]));
 //        $current = str_get_html($accounts[$i]);
         $link = $accounts[$i]->find('a')[1]->href;
+        $site_name = $accounts[$i]->find('a')[1]->innertext;
+        $site_name = trim($site_name);
+        var_dump($site_name);
+        $site_icon = $accounts[$i]->find('img')[0]->src;
+        var_dump($site_icon);
+
+        file_put_contents($site_name.".jpg", file_get_contents($site_icon));
+
         $reputation = $accounts[$i]->find('div[class="account-stat"]')[0]->children[0]->innertext;
         echo "reputation is: " . $reputation . "\n";
 //        foreach($link as $lk) {
@@ -152,11 +168,17 @@ function fetch_with_url($url) {
         }
         print_r($question_list);
         echo "\n";
-            
+
+        // You should return a text object? Or anything that can be written to and read from a text file.
 
 
+        $data[$site_name]["reputation"] = $reputation;
+        $data[$site_name]["answer"] = $answer_list;
+        $data[$site_name]["question"] = $question_list;
 
-
+        $userdata_file = fopen("./se_profile.txt", "w");
+//        file_put_contents("./se_profile.txt", serialize($data));
+        fwrite($userdata_file, serialize($data));
 //        echo $accounts[$i] .'<br>';
     }
 
