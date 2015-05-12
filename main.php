@@ -23,6 +23,7 @@ print("This is a debug");
 //
 //fetch_with_url("http://stackexchange.com/users/2843751/aszunes-heart?tab=accounts");
 fetch_with_url("http://127.0.0.1:1289/account.html");
+fetch_with_url("http://stackexchange.com/users/373922/loom?tab=accounts");
 
 //print_r(fetch('2843751'));
 
@@ -78,11 +79,30 @@ function fetch_with_url($url) {
 
 //        var_dump( is_object($accounts[$i]));
 //        $current = str_get_html($accounts[$i]);
-        $link = $accounts[$i]->find('div');
-        foreach($link as $lk) {
-//            var_dump($lk->innertext);
-            echo $lk->innertext;
-        }
+        $link = $accounts[$i]->find('a')[1]->href;
+        $reputation = $accounts[$i]->find('div[class="account-stat"]')[0]->children[0]->innertext;
+        echo "reputation is: " . $reputation . "\n";
+//        foreach($link as $lk) {
+////            var_dump($lk->innertext);
+//            echo $lk->innertext;
+//        }
+        echo "Profile link is: " . $link ."\n";
+
+        $uid_pattern = "/http:\/\/.*?\/(\d*)\//";
+        preg_match_all($uid_pattern, $link, $ids);
+        $ids = $ids[1][0];
+        echo "User id is: " . $ids ."\n";
+
+
+
+
+
+
+
+        
+
+
+
 
 
 //        echo $accounts[$i] .'<br>';
