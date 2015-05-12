@@ -102,8 +102,8 @@ function fetch_with_url($url) {
 //        $detail_account = file_get_html($link);
 
         // get question number and answer number
-        $answer_number = $accounts[$i]->find('div[class="account-stat"]', 2)->children[0]->innertext;
-        $question_number = $accounts[$i]->find('div[class="account-stat"]', 3)->children[0]->innertext;
+        $answer_number = $accounts[$i]->find('div[class="account-stat"]', 3)->children[0]->innertext;
+        $question_number = $accounts[$i]->find('div[class="account-stat"]', 2)->children[0]->innertext;
 
 //        var_dump($answer_number, $question_number);
         echo "answer number is: " . $answer_number ."\n";
@@ -112,13 +112,47 @@ function fetch_with_url($url) {
         $answer_ajax = "http://" . $domain . "/ajax/users/panel/answers/" . $ids . "?sort=newest";
         $question_ajax = "http://" . $domain . "/ajax/users/panel/questions/" . $ids . "?sort=newest";
 
-        var_dump($answer_ajax, $question_ajax);
-//
-//        $answers = file_get_html($answer_ajax);
-//
-//
-//        $questions = file_get_html($question_ajax)
 
+        $answers = file_get_html($answer_ajax);
+        if ($answer_number > 3) $answer_number = 3;
+        $answer_entries = $answers->find("tr");
+        echo "\n";
+
+        $answer_list = [];
+
+        for ($j = 0; $j < $answer_number; ++$j) {
+            echo $answer_entries[$j]->innertext;
+            echo "An answer is: " . $answer_entries[$j]->children[1]->title . "\n";
+            array_push($answer_list, $answer_entries[$j]->children[1]->title);
+        }
+
+        for ($j = $answer_number; $j < 3; ++$j) {
+            array_push($answer_list, "");
+        }
+        print_r($answer_list);
+        echo "\n";
+//
+
+//
+        $questions = file_get_html($question_ajax);
+        if ($question_number > 3) $question_number = 3;
+        $question_entries = $questions->find("tr");
+        echo "\n";
+
+        $question_list = [];
+
+        for ($j = 0; $j < $question_number; ++$j) {
+            echo $question_entries[$j]->innertext;
+            echo "An question is: " . $question_entries[$j]->children[1]->title . "\n";
+            array_push($question_list, $question_entries[$j]->children[1]->title);
+        }
+
+        for ($j = $question_number; $j < 3; ++$j) {
+            array_push($question_list, "");
+        }
+        print_r($question_list);
+        echo "\n";
+            
 
 
 
